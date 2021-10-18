@@ -28,16 +28,16 @@ Customize everything about the editor from the themes to what rendering api it u
 
 - ##### Completely customizable source without recompile
 
-      (Edit the Theme, Compilers, UI, Extensions, Etc).
+      (Edit the Theme, Compilers, UI, Extensions, Etc)
 - ##### Built-in plugins 
 
-      (Autocomplete, Git Management, Terminal, Etc).
+      (Autocomplete, Git Management, Terminal, Etc)
 - ##### Support for all languages 
 
-      (Comes with C/C++ support, but you can add your own support easily).
+      (Comes with C/C++ support, but you can add your own support easily)
 - ##### Efficient Workflow
 
-      (Distraction-less UI and Keybinds for faster page scrolling and functions).
+      (Distraction-less UI and Keybinds for faster page scrolling and function activation)
 
 ## How it works
 When you open the main application file it compiles the running program in a temporary folder for usage. But dont worry! Everything is saved. 
