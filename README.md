@@ -44,4 +44,4 @@ When you open the main application file it compiles the running program in a tem
 The application itself does not open the window, it simply compiles and opens the file/s you customize.
 Every extension/plugin you edit or create follows the defined functions (customizable) in the loader.h file.
 
-All of this allows for a very customizable editor with super-extensions that can even create their own sub-windows or particle effects through OpenGL
+All of this allows for a very customizable editor with super-extensions that can even create their own sub-windows or particle effects through OpenGL!
