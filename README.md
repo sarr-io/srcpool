@@ -45,3 +45,8 @@ The application itself does not open the window, it simply compiles and opens th
 Every extension/plugin you edit or create follows the defined functions (customizable) in the loader.h file.
 
 All of this allows for a very customizable editor with super-extensions that can even create their own sub-windows or particle effects through OpenGL!
+
+## Support this project
+<a href="https://patreon.com/sarrio">
+  <img src="https://user-images.githubusercontent.com/49985341/137796738-217f6fc6-bcba-4d67-924e-63cc9e292a17.png">
+</a>
