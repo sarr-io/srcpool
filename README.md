@@ -20,7 +20,7 @@
 ![b3a5ee1b-a5a4-4287-ad43-e65d3fe7dc05 sketchpad](https://user-images.githubusercontent.com/49985341/137650578-02a4d696-3135-4726-84fb-72f685580dda.png)
 (concept photo, check back later for real interface)
 
-## Features
+## 🔨 Features
 - ##### Completely customizable source without recompile
 
       (Edit the Theme, Compilers, UI, Extensions, Etc).
@@ -30,6 +30,6 @@
 - ##### Support for all languages 
 
       (Comes with C/C++ support, but you can add your own support easily).
-- ##### Efficient Workflow!
+- ##### Efficient Workflow
 
       (Distraction-less UI and Keybinds for faster page scrolling and functions).
