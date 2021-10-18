@@ -5,6 +5,9 @@
   <p>☕ Multi-platform, open source, "customizable down to the core" text/code editor.</p>
 </div>
 
+## It's yours to keep.
+Customize everything about the editor from the themes to what rendering api it uses in to better fit your workflow. Each plugin or core file can be edited or created to your will. All in C/C++!
+
 ## 📦 Releases
 | Build | Version | 
 | --- | --- |
@@ -21,6 +24,8 @@
 (concept photo, check back later for real interface)
 
 ## 🔨 Features
+- ##### Created in SDL2 and OpenGL
+
 - ##### Completely customizable source without recompile
 
       (Edit the Theme, Compilers, UI, Extensions, Etc).
@@ -33,3 +38,10 @@
 - ##### Efficient Workflow
 
       (Distraction-less UI and Keybinds for faster page scrolling and functions).
+
+## How it works
+When you open the main application file it compiles the running program in a temporary folder for usage. But dont worry! Everything is saved. 
+The application itself does not open the window, it simply compiles and opens the file/s you customize.
+Every extension/plugin you edit or create follows the defined functions (customizable) in the loader.h file.
+
+All of this allows for a very customizable editor with super-extensions that can even create their own sub-windows or particle effects through OpenGL
