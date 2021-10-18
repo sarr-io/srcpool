@@ -6,7 +6,7 @@
 </div>
 
 ## It's yours to keep.
-Customize everything about the editor from the themes to what rendering api it uses in to better fit your workflow. Each plugin or core file can be edited or created to your will. All in C/C++!
+Customize everything about the editor from the theme, to what rendering api it utilizes in to better fit your workflow. Each plugin or core file can be edited or created to your will. All in C/C++!
 
 ## 📦 Releases
 | Build | Version | 
