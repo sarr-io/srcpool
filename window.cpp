@@ -1,46 +1,24 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
 
-#define SCREEN_WIDTH 1280 
-#define SCREEN_HEIGHT 720
+int main(int argc, char* args[]) {
+    int winW = 1200;
+    int winH = 600;
+    Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
+    SDL_Window* window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, winW, winH, flags);
 
-int main(int argc, char** argv){
-    if(SDL_Init(SDL_INIT_VIDEO) < 0){
-        printf("Error: SDL failed to initialize\nSDL Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
+    SDL_Init(SDL_INIT_EVERYTHING);
 
-    SDL_Window *window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
-    if(!window){
-        printf("Error: Failed to open window\nSDL Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if(!renderer){
-        printf("Error: Failed to create renderer\nSDL Error: '%s'\n", SDL_GetError());
-        return 1;
-    }
-
-    bool running = true;
-    while(running){
+    while(true) {
         SDL_Event event;
-        while(SDL_PollEvent(&event)){
-            switch(event.type){
-                case SDL_QUIT:
-                    running = false;
-                    break;
-
-                default:
-                    break;
-            }
+        while (SDL_PollEvent(&event)) {
+            if( event.type == SDL_QUIT )
+                SDL_DestroyWindow(window);
+                SDL_Quit();
         }
 
-        SDL_SetRenderDrawColor(renderer, 19, 19, 19, 100);
-        SDL_RenderClear(renderer);
+        SDL_Surface* screenSurface = SDL_GetWindowSurface(window);
+        SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
-        SDL_RenderPresent(renderer);
+        SDL_UpdateWindowSurface(window);
     }
-
-    return 0;
-}
