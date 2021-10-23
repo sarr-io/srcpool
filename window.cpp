@@ -1,25 +1,12 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_main.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <stdio.h>
-#include <vector>
-#include <algorithm>
+#include <loader.h>
 
-bool XYInRect(const SDL_Rect& rect, int x, int y)
-{
-    return ((x >= rect.x && x <= rect.x + rect.w) && (y >= rect.y && y <= rect.y + rect.h));
+int renderScreen() {
+    // Add GL rendering stuff here.
 }
 
-SDL_Rect titleBar;
-
-SDL_HitTestResult hitCallback(SDL_Window* win, const SDL_Point* area, void* data) {
-    if (XYInRect(titleBar, area->x, area->y)) {
-        return (SDL_HITTEST_DRAGGABLE);
-    }
+int initGL() {
+    // Add GL stuff here.
 }
-
-std::vector<SDL_Event> eventVector;
 
 int main(int argc, char* args[]) {
     bool quit = false;
@@ -27,12 +14,15 @@ int main(int argc, char* args[]) {
     int winW = 1300;
     int winH = 700;
 
+    setGLAttributes();
+
     Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
     SDL_Window* window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW, winH, flags);
 
+    initGL();
+
     while(!quit) {
         SDL_Event event;
-
         int mouseX = event.motion.x;
         int mouseY = event.motion.y;
 
@@ -42,6 +32,7 @@ int main(int argc, char* args[]) {
         SDL_SetRenderDrawColor(renderer, 28, 28, 29, 255);
         SDL_RenderClear(renderer);
 
+        SDL_Rect titleBar;
         titleBar.x = 0;
         titleBar.y = 0;
         titleBar.w = winW;
@@ -59,7 +50,9 @@ int main(int argc, char* args[]) {
             // TODO: Add event for clicking on resize frame, then set the window size to new size when dragging.
         }
 
-        SDL_SetWindowHitTest(window, hitCallback, 0);
+        srcpool_drag(titleBar, window);
+
+        renderScreen();
     }
 
     SDL_DestroyWindow(window);
