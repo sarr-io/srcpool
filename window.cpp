@@ -15,11 +15,14 @@ int main(int argc, char* args[]) {
     int winH = 700;
 
     setGLAttributes();
+    IMG_Init(IMG_INIT_PNG);
 
     Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
     SDL_Window* window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW, winH, flags);
 
-    initGL();
+    //initGL();
+
+    setIcon(window);
 
     while(!quit) {
         SDL_Event event;
@@ -52,10 +55,11 @@ int main(int argc, char* args[]) {
 
         srcpool_drag(titleBar, window);
 
-        renderScreen();
+        //renderScreen();
     }
 
     SDL_DestroyWindow(window);
+    IMG_Quit();
     SDL_Quit();
 
     return 0;

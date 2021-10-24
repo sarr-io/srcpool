@@ -33,3 +33,8 @@ int setGLAttributes() {
 
     return 0;
 }
+
+int setIcon(SDL_Window* window) {
+    SDL_Surface* icon = IMG_Load("images/icon.png");
+    SDL_SetWindowIcon(window, icon);
+}
