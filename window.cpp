@@ -1,12 +1,6 @@
 #include <loader.h>
 
-int renderScreen() {
-    // Add GL rendering stuff here.
-}
 
-int initGL() {
-    // Add GL stuff here.
-}
 
 int main(int argc, char* args[]) {
     bool quit = false;
@@ -20,9 +14,9 @@ int main(int argc, char* args[]) {
     Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
     SDL_Window* window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW, winH, flags);
 
-    //initGL();
-
     setIcon(window);
+
+    //initGL();
 
     while(!quit) {
         SDL_Event event;
@@ -32,7 +26,7 @@ int main(int argc, char* args[]) {
         SDL_Renderer* renderer = NULL;
         renderer =  SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-        SDL_SetRenderDrawColor(renderer, 28, 28, 29, 255);
+        SDL_SetRenderDrawColor(renderer, 26, 26, 26, 255);
         SDL_RenderClear(renderer);
 
         SDL_Rect titleBar;
@@ -41,7 +35,7 @@ int main(int argc, char* args[]) {
         titleBar.w = winW;
         titleBar.h = 20;
 
-        SDL_SetRenderDrawColor(renderer, 26, 26, 27, 255);
+        SDL_SetRenderDrawColor(renderer, 24, 24, 24, 255);
         SDL_RenderFillRect(renderer, &titleBar);
         SDL_RenderPresent(renderer);
         

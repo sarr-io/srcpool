@@ -1,0 +1,1 @@
+Look at the docs (https://www.srcpool.dev/docs) to find information on how to customize srcpool!

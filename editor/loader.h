@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <glad/glad.h>
+#include <iostream>
 
 bool cursorInArea(const SDL_Rect& rect, int x, int y)
 {
@@ -35,6 +36,12 @@ int setGLAttributes() {
 }
 
 int setIcon(SDL_Window* window) {
-    SDL_Surface* icon = IMG_Load("images/icon.png");
+    SDL_Surface* icon = IMG_Load("images\\icon.png");
+    if (icon == NULL) {
+        std::cout << SDL_GetError() << std::endl;
+    }
+    else {
+        std::cout << "image loaded" << std::endl;
+    }
     SDL_SetWindowIcon(window, icon);
 }
