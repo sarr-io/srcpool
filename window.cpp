@@ -26,7 +26,7 @@ int main(int argc, char* args[]) {
         SDL_Renderer* renderer = NULL;
         renderer =  SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-        SDL_SetRenderDrawColor(renderer, 26, 26, 26, 255);
+        SDL_SetRenderDrawColor(renderer, 23, 23, 23, 255);
         SDL_RenderClear(renderer);
 
         SDL_Rect titleBar;
@@ -35,7 +35,7 @@ int main(int argc, char* args[]) {
         titleBar.w = winW;
         titleBar.h = 20;
 
-        SDL_SetRenderDrawColor(renderer, 25.5, 25.5, 25.5, 255);
+        SDL_SetRenderDrawColor(renderer, 22, 22, 22, 255);
         SDL_RenderFillRect(renderer, &titleBar);
         SDL_RenderPresent(renderer);
         
