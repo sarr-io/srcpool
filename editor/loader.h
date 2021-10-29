@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <glad/glad.h>
+#include <GL/glu.h>
 #include <iostream>
 
 bool cursorInArea(const SDL_Rect& rect, int x, int y)
@@ -21,16 +22,28 @@ SDL_HitTestResult hitCallback(SDL_Window* win, const SDL_Point* area, void* data
     }
 }
 
-void srcpool_drag(SDL_Rect bar, SDL_Window* window) {
-    sdlRect = bar;
+void srcpool_drag(SDL_Window* window, int winW) {
+    sdlRect.x = 0;
+    sdlRect.y = 0;
+    sdlRect.w = winW;
+    sdlRect.h = 20;
+
     SDL_SetWindowHitTest(window, hitCallback, 0);
 }
 
 int setGLAttributes() {
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 
     return 0;
 }
@@ -41,7 +54,7 @@ int setIcon(SDL_Window* window) {
         std::cout << SDL_GetError() << std::endl;
     }
     else {
-        std::cout << "image loaded" << std::endl;
+        std::cout << "Icon Loaded!" << std::endl;
     }
     SDL_SetWindowIcon(window, icon);
 }
