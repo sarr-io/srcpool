@@ -1,20 +1,30 @@
+// Standard
+#include <stdio.h>
+#include <vector>
+#include <algorithm>
+#include <iostream>
+#include <string>
+
+// SDL2
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_main.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <stdio.h>
-#include <vector>
-#include <algorithm>
-#include <glad/glad.h>
-#include <GL/glu.h>
-#include <iostream>
 
+// OpenGL
+#include <glad/glad.h>
+#include <GL/gl.h>
+
+
+// Variables
+SDL_Rect sdlRect;
+// add array of lines of text index acts as line #, value acts as the line's string
+
+// Functions
 bool cursorInArea(const SDL_Rect& rect, int x, int y)
 {
     return ((x >= rect.x && x <= rect.x + rect.w) && (y >= rect.y && y <= rect.y + rect.h));
 }
-
-SDL_Rect sdlRect;
 
 SDL_HitTestResult hitCallback(SDL_Window* win, const SDL_Point* area, void* data) {
     if (cursorInArea(sdlRect, area->x, area->y)) {
@@ -42,7 +52,7 @@ int setGLAttributes() {
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 32);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     return 0;
@@ -58,3 +68,5 @@ int setIcon(SDL_Window* window) {
     }
     SDL_SetWindowIcon(window, icon);
 }
+
+// TODO: Add function for font rendering. (http://oglft.sourceforge.net/)

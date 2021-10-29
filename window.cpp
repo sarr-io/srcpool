@@ -1,5 +1,34 @@
 #include <loader.h>
 
+int close(SDL_Window* window, SDL_GLContext glContext) {
+    SDL_DestroyWindow(window);
+    SDL_GL_DeleteContext(glContext);
+    IMG_Quit();
+    SDL_Quit();
+}
+
+int renderWindowBase(int winW, int winH) {
+
+    // Window
+    glBegin(GL_QUADS);
+    glColor3f(0.085f, 0.085f, 0.085f);
+    glVertex3i(winW, winH, 0);
+    glVertex3i(0, winH, 0);
+    glVertex3i(0, 0, 0);
+    glVertex3i(winW, 0, 0);
+    glEnd();
+
+    // Titlebar
+    glBegin(GL_QUADS);
+    glColor3f(0.08f, 0.08f, 0.08f);
+    glVertex3i(winW, winH, 1);
+    glVertex3i(0, winH, 1);
+    glVertex3i(0, winH - 20, 1);
+    glVertex3i(winW, winH - 20, 1);
+    glEnd();
+
+}
+
 int main(int argc, char* argv[]) {
     bool quit = false;
 
@@ -14,6 +43,8 @@ int main(int argc, char* argv[]) {
     SDL_Window* window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW, winH, flags);
     SDL_GLContext glContext = SDL_GL_CreateContext(window);
     gladLoadGLLoader(SDL_GL_GetProcAddress);
+    glOrtho(0, winW, 0, winH, -1, 1);
+    glEnable(GL_BLEND);
 
     setIcon(window);
 
@@ -29,22 +60,22 @@ int main(int argc, char* argv[]) {
                 quit = true;
             }
             // TODO: Add event for clicking on resize frame, then set the window size to new size when dragging.
+            // TODO: Add switch statement for focus mode.
+            // TODO: Add event for key presses.
         }
         
         srcpool_drag(window, winW);
 
         glClearColor(0.f, 0.f, 0.f, 0.f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // do stuff
-        
+        renderWindowBase(winW, winH);
+
         SDL_GL_SwapWindow(window);
     }
 
-    SDL_DestroyWindow(window);
-    SDL_GL_DeleteContext(glContext);
-    IMG_Quit();
-    SDL_Quit();
+    // Closes all processes
+    close(window, glContext);
 
     return 0;
 }
