@@ -17,28 +17,28 @@
 
 
 // Variables
-SDL_Rect sdlRect;
-// add array of lines of text index acts as line #, value acts as the line's string
+int winW = 1300;
+int winH = 700;
+int mouseX;
+int mouseY;
+// add array of lines of text (from open file) index acts as line #, value acts as the line's string
 
 // Functions
-bool cursorInArea(const SDL_Rect& rect, int x, int y)
+bool srcpool_cursorInArea(int coordPlane[4], int posX, int posY, int windowH)
 {
-    return ((x >= rect.x && x <= rect.x + rect.w) && (y >= rect.y && y <= rect.y + rect.h));
+    return ((posY >= (windowH - coordPlane[1]) && posY <= (windowH - coordPlane[3])) && (posX <= coordPlane[0] && posX >= coordPlane[2]));
 }
 
 SDL_HitTestResult hitCallback(SDL_Window* win, const SDL_Point* area, void* data) {
-    if (cursorInArea(sdlRect, area->x, area->y)) {
+    int testArea[4] = {winW, winH, 0, (winH - 20)};
+    if (srcpool_cursorInArea(testArea, mouseX, mouseY, 700)) {
         return (SDL_HITTEST_DRAGGABLE);
     }
 }
 
-void srcpool_drag(SDL_Window* window, int winW) {
-    sdlRect.x = 0;
-    sdlRect.y = 0;
-    sdlRect.w = winW;
-    sdlRect.h = 20;
-
-    SDL_SetWindowHitTest(window, hitCallback, 0);
+int srcpool_updateCursor(int mouseX, int mouseY) {
+    mouseX = mouseX;
+    mouseY = mouseY;
 }
 
 int setGLAttributes() {
@@ -58,7 +58,7 @@ int setGLAttributes() {
     return 0;
 }
 
-int setIcon(SDL_Window* window) {
+int srcpool_setIcon(SDL_Window* window) {
     SDL_Surface* icon = IMG_Load("images\\icon.png");
     if (icon == NULL) {
         std::cout << SDL_GetError() << std::endl;

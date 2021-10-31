@@ -32,9 +32,6 @@ int renderWindowBase(int winW, int winH) {
 int main(int argc, char* argv[]) {
     bool quit = false;
 
-    int winW = 1300;
-    int winH = 700;
-
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG);
     setGLAttributes();
@@ -46,7 +43,7 @@ int main(int argc, char* argv[]) {
     glOrtho(0, winW, 0, winH, -1, 1);
     glEnable(GL_BLEND);
 
-    setIcon(window);
+    srcpool_setIcon(window);
 
     while(!quit) {
         SDL_Event event;
@@ -62,9 +59,11 @@ int main(int argc, char* argv[]) {
             // TODO: Add event for clicking on resize frame, then set the window size to new size when dragging.
             // TODO: Add switch statement for focus mode.
             // TODO: Add event for key presses.
+            // TODO: Check if clicking on tab button.
         }
-        
-        srcpool_drag(window, winW);
+
+        srcpool_updateCursor(mouseX, mouseY);
+        SDL_SetWindowHitTest(window, hitCallback, 0);
 
         glClearColor(0.f, 0.f, 0.f, 0.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
