@@ -21,17 +21,22 @@ int winW = 1300;
 int winH = 700;
 int mouseX;
 int mouseY;
+std::string loadedFile;
+int focusMode;
+
+std::vector<std::string> tabList;
+
 // add array of lines of text (from open file) index acts as line #, value acts as the line's string
 
 // Functions
-bool srcpool_cursorInArea(int coordPlane[4], int posX, int posY, int windowH)
+bool srcpool_cursorInArea(int hitBox[4], int posX, int posY)
 {
-    return ((posY >= (windowH - coordPlane[1]) && posY <= (windowH - coordPlane[3])) && (posX <= coordPlane[0] && posX >= coordPlane[2]));
+    return ((posY >= (winH - hitBox[1]) && posY <= (winH - hitBox[3])) && (posX <= hitBox[0] && posX >= hitBox[2]));
 }
 
 SDL_HitTestResult hitCallback(SDL_Window* win, const SDL_Point* area, void* data) {
     int testArea[4] = {winW, winH, 0, (winH - 20)};
-    if (srcpool_cursorInArea(testArea, mouseX, mouseY, 700)) {
+    if (srcpool_cursorInArea(testArea, mouseX, mouseY)) {
         return (SDL_HITTEST_DRAGGABLE);
     }
 }
@@ -58,8 +63,7 @@ int setGLAttributes() {
     return 0;
 }
 
-int srcpool_setIcon(SDL_Window* window) {
-    SDL_Surface* icon = IMG_Load("images\\icon.png");
+int srcpool_setIcon(SDL_Window* window, SDL_Surface* icon) {
     if (icon == NULL) {
         std::cout << SDL_GetError() << std::endl;
     }
@@ -68,5 +72,19 @@ int srcpool_setIcon(SDL_Window* window) {
     }
     SDL_SetWindowIcon(window, icon);
 }
+
+int srcpool_tabFocus(int i) {
+    // search through tabList vector for the file path, then load the file.
+}
+
+int srcpool_loadFile(std::string filePath) {
+    // do some io stuff and iterate through lines (clear, then add to textbox vector)
+}
+
+std::string srcpool_getLoadedFile() {
+    return (loadedFile);
+}
+
+// TODO: make init for textbox, start back at last open path .txt (if none start blank textbox)
 
 // TODO: Add function for font rendering. (http://oglft.sourceforge.net/)

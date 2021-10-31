@@ -43,7 +43,8 @@ int main(int argc, char* argv[]) {
     glOrtho(0, winW, 0, winH, -1, 1);
     glEnable(GL_BLEND);
 
-    srcpool_setIcon(window);
+    SDL_Surface* icon = IMG_Load("images\\icon.png");
+    srcpool_setIcon(window, icon);
 
     while(!quit) {
         SDL_Event event;
@@ -57,8 +58,8 @@ int main(int argc, char* argv[]) {
                 quit = true;
             }
             // TODO: Add event for clicking on resize frame, then set the window size to new size when dragging.
-            // TODO: Add switch statement for focus mode.
-            // TODO: Add event for key presses.
+            // TODO: Add keystroke to toggle focus mode (textbox vs menu)
+            // TODO: Add event for key presses. (check focus mode)
             // TODO: Check if clicking on tab button.
         }
 
