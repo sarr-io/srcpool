@@ -22,7 +22,9 @@ int winH = 700;
 int mouseX;
 int mouseY;
 std::string loadedFile;
-int focusMode;
+int focusMode = 0;
+bool commandMode = false;
+int selectedLine;
 
 std::vector<std::string> tabList;
 
@@ -83,6 +85,15 @@ int srcpool_loadFile(std::string filePath) {
 
 std::string srcpool_getLoadedFile() {
     return (loadedFile);
+}
+
+// 0 = textbox
+// 1 = menu
+int resetMode = 1;
+int srcpool_toggleFocusMode() {
+    focusMode++;
+    if (focusMode > resetMode) {focusMode = 0;}
+    return 0;
 }
 
 // TODO: make init for textbox, start back at last open path .txt (if none start blank textbox)

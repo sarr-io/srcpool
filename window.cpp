@@ -60,7 +60,36 @@ int main(int argc, char* argv[]) {
             // TODO: Add event for clicking on resize frame, then set the window size to new size when dragging.
             // TODO: Add keystroke to toggle focus mode (textbox vs menu)
             // TODO: Add event for key presses. (check focus mode)
+            // TODO: Add event to check line number.
             // TODO: Check if clicking on tab button.
+            if (event.type == SDL_KEYDOWN) {
+                // All keybinds
+                if (event.key.keysym.sym == SDLK_LSHIFT) {
+                    std::cout << "Waiting for command..." << std::endl;
+                    commandMode = !commandMode;
+                }
+                if (commandMode) {
+                    switch (event.key.keysym.sym) {
+                        case SDLK_m:
+                            srcpool_toggleFocusMode();
+                            std::cout << "Focus Toggled!" << std::endl;
+                            commandMode = false;
+                            break;
+                        case SDLK_e:
+                            std::cout << "Compiled!" << std::endl;
+                            commandMode = false;
+                            break;
+                    }
+                }
+                else {
+                    switch (event.key.keysym.sym) {
+                        case SDLK_F5:
+                            std::cout << "Compiled!" << std::endl;
+                            commandMode = false;
+                            break;
+                    }
+                }
+            }
         }
 
         srcpool_updateCursor(mouseX, mouseY);
