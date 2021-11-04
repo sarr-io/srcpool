@@ -41,6 +41,8 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "cinttypes": "cpp",
-        "typeinfo": "cpp"
-    }
+        "typeinfo": "cpp",
+        "glad.h": "c"
+    },
+    "cmake.configureOnOpen": false
 }

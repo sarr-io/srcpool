@@ -1,55 +1,64 @@
 #include <loader.h>
+using namespace srcpool;
 
 int close(SDL_Window* window, SDL_GLContext glContext) {
+    IMG_Quit();
+    
     SDL_DestroyWindow(window);
     SDL_GL_DeleteContext(glContext);
-    IMG_Quit();
     SDL_Quit();
+
+    return 0;
 }
 
-int renderWindowBase(int winW, int winH) {
-
-    // Window
-    glBegin(GL_QUADS);
-    glColor3f(0.085f, 0.085f, 0.085f);
-    glVertex3i(winW, winH, 0);
-    glVertex3i(0, winH, 0);
-    glVertex3i(0, 0, 0);
-    glVertex3i(winW, 0, 0);
-    glEnd();
-
-    // Titlebar
-    glBegin(GL_QUADS);
-    glColor3f(0.08f, 0.08f, 0.08f);
-    glVertex3i(winW, winH, 1);
-    glVertex3i(0, winH, 1);
-    glVertex3i(0, winH - 20, 1);
-    glVertex3i(winW, winH - 20, 1);
-    glEnd();
-
-}
+// Shader sources
+const GLchar* vertexSource = R"glsl(
+    #version 150 core
+    in vec2 position;
+    void main()
+    {
+        gl_Position = vec4(position, 0.0, 1.0);
+    }
+)glsl";
+const GLchar* fragmentSource = R"glsl(
+    #version 150 core
+    out vec4 outColor;
+    void main()
+    {
+        outColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+)glsl";
 
 int main(int argc, char* argv[]) {
+    
+    // Variables
     bool quit = false;
 
+    // Initializations
     SDL_Init(SDL_INIT_EVERYTHING);
     IMG_Init(IMG_INIT_PNG);
     setGLAttributes();
 
+    // Creating the window
     Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
     SDL_Window* window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW, winH, flags);
     SDL_GLContext glContext = SDL_GL_CreateContext(window);
-    gladLoadGLLoader(SDL_GL_GetProcAddress);
-    glOrtho(0, winW, 0, winH, -1, 1);
-    glEnable(GL_BLEND);
+    SDL_GL_MakeCurrent(window, glContext);
 
     SDL_Surface* icon = IMG_Load("images\\icon.png");
-    srcpool_setIcon(window, icon);
+    setIcon(window, icon);
+
+    if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+        printf("Failed to initialize GLAD\n");
+        return -1;
+    }
+
+    glViewport(0, 0, winW, winH);
 
     while(!quit) {
         SDL_Event event;
-        int mouseX = event.motion.x;
-        int mouseY = event.motion.y;
+        mouseX = event.motion.x;
+        mouseY = event.motion.y;
         
         // Input Collection
         while (SDL_PollEvent(&event) != 0) {
@@ -67,7 +76,7 @@ int main(int argc, char* argv[]) {
                 if (commandMode) {
                     switch (event.key.keysym.sym) {
                         case SDLK_m:
-                            srcpool_toggleFocusMode();
+                            toggleFocusMode();
                             std::cout << "Focus Toggled!" << std::endl;
                             commandMode = false;
                             break;
@@ -81,20 +90,16 @@ int main(int argc, char* argv[]) {
                     switch (event.key.keysym.sym) {
                         case SDLK_F5:
                             std::cout << "Compiled!" << std::endl;
-                            commandMode = false;
                             break;
                     }
                 }
             }
         }
 
-        srcpool_updateCursor(mouseX, mouseY);
         SDL_SetWindowHitTest(window, hitCallback, 0);
 
-        glClearColor(0.f, 0.f, 0.f, 0.f);
+        glClearColor(0.085f, 0.085f, 0.085f, 0.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        renderWindowBase(winW, winH);
 
         SDL_GL_SwapWindow(window);
     }
