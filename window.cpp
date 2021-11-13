@@ -11,26 +11,8 @@ int close(SDL_Window* window, SDL_GLContext glContext) {
     return 0;
 }
 
-// Shader sources
-const GLchar* vertexSource = R"glsl(
-    #version 150 core
-    in vec2 position;
-    void main()
-    {
-        gl_Position = vec4(position, 0.0, 1.0);
-    }
-)glsl";
-const GLchar* fragmentSource = R"glsl(
-    #version 150 core
-    out vec4 outColor;
-    void main()
-    {
-        outColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-)glsl";
-
 int main(int argc, char* argv[]) {
-    
+
     // Variables
     bool quit = false;
 
@@ -48,12 +30,18 @@ int main(int argc, char* argv[]) {
     SDL_Surface* icon = IMG_Load("images\\icon.png");
     setIcon(window, icon);
 
+    // Setting up OpenGL
     if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
         printf("Failed to initialize GLAD\n");
         return -1;
     }
-
     glViewport(0, 0, winW, winH);
+
+    // Initialize the VAOs
+    assignVAO(windowVAO);
+    assignVAO(tablistVAO);
+    assignVAO(textboxVAO);
+    startRenderer();
 
     while(!quit) {
         SDL_Event event;
@@ -100,6 +88,8 @@ int main(int argc, char* argv[]) {
 
         glClearColor(0.085f, 0.085f, 0.085f, 0.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        Draw();
 
         SDL_GL_SwapWindow(window);
     }

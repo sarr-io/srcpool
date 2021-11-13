@@ -1,5 +1,5 @@
-// OpenGL
-#include "glad/glad.h"
+// Renderer
+#include <renderer.h>
 
 // SDL2
 #include <SDL2/SDL.h>
@@ -9,15 +9,26 @@
 
 // Standard
 #include <stdio.h>
-#include <vector>
 #include <algorithm>
-#include <iostream>
 #include <string>
+#include <vector>
+#include <iostream>
 
 // Shaders
 #include <shaders/default.h>
 
 namespace srcpool {
+
+    namespace components {
+
+        // Titlebar
+        std::string Titlebar[] = {
+            "1", // ID
+            "-0.5,0.5,0,  0.5,0.5,0,  -0.5,-0.5,0,  0.5,-0.5,0", // Position(s)
+            "0, 1, 2, 3" // Indices
+        };
+
+    }
 
     // Variables
     int winW = 1300;
@@ -32,21 +43,14 @@ namespace srcpool {
     int focusMode = 0;
     bool commandMode = false;
 
-    GLuint VBO, VAO, EBO;
+    void startRenderer() {
 
-    // Functions
-    bool cursorInArea(int hitBox[4], int posX, int posY)
-    {
-        return ((posY >= (winH - hitBox[1]) && posY <= (winH - hitBox[3])) && (posX <= hitBox[0] && posX >= hitBox[2]));
-    }
+        // Add other components here, or call InitComponents() after adding somewhere else.
+        AddBuffer(components::Titlebar);
 
-    SDL_HitTestResult hitCallback(SDL_Window* win, const SDL_Point* area, void* data) {
-        int testArea[4] = {winW, winH, 0, (winH - 20)};
-        if (cursorInArea(testArea, mouseX, mouseY)) {
-            return (SDL_HITTEST_DRAGGABLE);
-        }
-
-        return (SDL_HITTEST_NORMAL);
+        // Init components before returning
+        InitComponents();
+        return;
     }
 
     int setGLAttributes() {
@@ -98,7 +102,7 @@ namespace srcpool {
     }
 
     // TODO: Add function to convert #hex color codes into proper color format for opengl shader.
-    // float convertColor(std::string hexValue, float* r, float* g, float* b) {
+    // float convertColor(std::string hexValue, float r, float g, float b) {
     //     // Do some weird math stuff (divide by 255.0f)
     //     return;
     // }
@@ -107,11 +111,19 @@ namespace srcpool {
 
     // TODO: Add function for font rendering. (http://oglft.sourceforge.net/)
 
-    // Component values (all rendered objects that need to save a value)
-    namespace components {
-        
-        // Add component for titlebar
+    // Window Checks
+    bool cursorInArea(int hitBox[4], int posX, int posY)
+    {
+        return ((posY >= (winH - hitBox[1]) && posY <= (winH - hitBox[3])) && (posX <= hitBox[0] && posX >= hitBox[2]));
+    }
 
+    SDL_HitTestResult hitCallback(SDL_Window* win, const SDL_Point* area, void* data) {
+        int testArea[4] = {winW, winH, 0, (winH - 20)};
+        if (cursorInArea(testArea, mouseX, mouseY)) {
+            return (SDL_HITTEST_DRAGGABLE);
+        }
+
+        return (SDL_HITTEST_NORMAL);
     }
 
 }
