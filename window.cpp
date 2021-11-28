@@ -11,6 +11,24 @@ int close(SDL_Window* window, SDL_GLContext glContext) {
     return 0;
 }
 
+static void APIENTRY openglCallbackFunction(
+    GLenum source,
+    GLenum type,
+    GLuint id,
+    GLenum severity,
+    GLsizei length,
+    const GLchar* message,
+    const void* userParam
+){
+    (void)source; (void)type; (void)id; 
+    (void)severity; (void)length; (void)userParam;
+    fprintf(stderr, "%s\n", message);
+    if (severity==GL_DEBUG_SEVERITY_HIGH) {
+        fprintf(stderr, "Aborting...\n");
+        abort();
+    }
+}
+
 int main(int argc, char* argv[]) {
 
     // Variables
@@ -36,12 +54,15 @@ int main(int argc, char* argv[]) {
         return -1;
     }
     glViewport(0, 0, winW, winH);
+    // Enable the debug callback
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(openglCallbackFunction, nullptr);
+    glDebugMessageControl(
+    GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
+    );
 
-    // Initialize the VAOs
-    assignVAO(windowVAO);
-    assignVAO(tablistVAO);
-    assignVAO(textboxVAO);
-    startRenderer();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while(!quit) {
         SDL_Event event;
@@ -88,8 +109,6 @@ int main(int argc, char* argv[]) {
 
         glClearColor(0.085f, 0.085f, 0.085f, 0.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        Draw();
 
         SDL_GL_SwapWindow(window);
     }

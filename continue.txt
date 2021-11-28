@@ -1,1 +1,3 @@
-add shaders, fix encryption and decryption system to include float numbers
+add threading system
+finish implementing the structure defined in obsidian
+dont forget to make functions that deconstruct the objects to garbage collect

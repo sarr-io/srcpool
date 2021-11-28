@@ -1,5 +1,5 @@
-// Renderer
-#include <renderer.h>
+// OpenGL
+#include <glad/glad.h>
 
 // SDL2
 #include <SDL2/SDL.h>
@@ -13,22 +13,13 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
-// Shaders
-#include <shaders/default.h>
+#include <fstream>
+#include <ctype.h>
+#include <fstream>
+#include <cstring>
+#include <sstream>
 
 namespace srcpool {
-
-    namespace components {
-
-        // Titlebar
-        std::string Titlebar[] = {
-            "1", // ID
-            "-0.5,0.5,0,  0.5,0.5,0,  -0.5,-0.5,0,  0.5,-0.5,0", // Position(s)
-            "0, 1, 2, 3" // Indices
-        };
-
-    }
 
     // Variables
     int winW = 1300;
@@ -43,17 +34,8 @@ namespace srcpool {
     int focusMode = 0;
     bool commandMode = false;
 
-    void startRenderer() {
-
-        // Add other components here, or call InitComponents() after adding somewhere else.
-        AddBuffer(components::Titlebar);
-
-        // Init components before returning
-        InitComponents();
-        return;
-    }
-
     int setGLAttributes() {
+        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
         SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
         SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
         SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -63,7 +45,9 @@ namespace srcpool {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
         SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
-        SDL_SetHint(SDL_HINT_RENDER_OPENGL_SHADERS, "1");
+
+        // Request a debug context.
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 
         return 0;
     }
@@ -125,5 +109,30 @@ namespace srcpool {
 
         return (SDL_HITTEST_NORMAL);
     }
+
+    class Renderer {
+
+        public:
+
+            void attachObject(); // Adds an object type to the list of updated objects on screen at a given moment.
+            void detachObject(); // Removes an object type from the list of updated objects on screen at a given moment.
+
+            typedef struct Objects {
+                std::vector<GLfloat> vertices;
+                std::vector<int> indices;
+                
+                std::vector<GLfloat> colors;
+                std::vector<int> shaderProgramID;
+                std::vector<std::string> name;
+            } Objects;
+
+            class Queue {
+            
+                void listObjects(); // List all objects in the queue.
+                void findObject(); // Returns true or false if the object is found.
+            
+            };
+
+    };
 
 }
