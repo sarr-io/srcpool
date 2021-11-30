@@ -128,7 +128,7 @@ namespace srcpool {
 
             class Queue {
             
-                void listObjects(); // List all objects in the queue.
+                void listObjects(); // List all objects in the queue (BY NAME, INDEX IS THE ID FOR ALL VALUES/PARAMETERS)
                 void findObject(); // Returns true or false if the object is found.
             
             };
