@@ -7,32 +7,49 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-// Standard
-#include <stdio.h>
-#include <algorithm>
-#include <string>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <ctype.h>
-#include <fstream>
-#include <cstring>
-#include <sstream>
+// Renderer
+#include <renderer.h>
 
 namespace srcpool {
 
-    // Variables
+    /*
+        VARIABLES
+    ================================================
+    */
+    Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
+
     int winW = 1300;
     int winH = 700;
 
     int mouseX, mouseY;
 
-    std::vector<std::string> tabList;
-    std::string loadedFile;
-    int selectedLine;
-
     int focusMode = 0;
     bool commandMode = false;
+    std::vector<std::string> tabList;
+
+    int defaultFontSize = 24; // In the future, this value will come from settings.json.
+
+
+
+    /*
+        CORE CLASSES
+    ================================================
+    */
+
+    class Tab;
+
+    class Textbox;
+
+    class Menu;
+
+    class Extensions;
+
+
+
+    /*
+        FUNCTIONS
+    ================================================
+    */
 
     int setGLAttributes() {
         SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
@@ -64,18 +81,6 @@ namespace srcpool {
         return 0;
     }
 
-    // int tabFocus(int i) {
-    //     // search through tabList vector for the file path, then load the file.
-    // }
-
-    // int loadFile(std::string filePath) {
-    //     // do some io stuff and iterate through lines (clear, then add to textbox vector)
-    // }
-
-    // std::string getLoadedFile() {
-    //     return (loadedFile);
-    // }
-
     // 0 = textbox
     // 1 = menu
     int resetMode = 1;
@@ -85,15 +90,12 @@ namespace srcpool {
         return 0;
     }
 
-    // TODO: Add function to convert #hex color codes into proper color format for opengl shader.
-    // float convertColor(std::string hexValue, float r, float g, float b) {
-    //     // Do some weird math stuff (divide by 255.0f)
-    //     return;
-    // }
-
     // TODO: make init for textbox, start back at last open path .txt (if none start blank textbox)
 
-    // TODO: Add function for font rendering. (http://oglft.sourceforge.net/)
+    /* 
+    Setup temporary font rendering with libdrawtext (https://github.com/jtsiomb/libdrawtext/blob/master/examples/simple/simple.c) 
+    Will most likely replace with  my own solution, just testing different libraries
+    */
 
     // Window Checks
     bool cursorInArea(int hitBox[4], int posX, int posY)
@@ -110,29 +112,48 @@ namespace srcpool {
         return (SDL_HITTEST_NORMAL);
     }
 
-    class Renderer {
+    void inputCollection(SDL_Event event, bool &quit) {
+        if (event.type == SDL_QUIT) {
+            std::cout << "Closing..." << std::endl;
+            quit = true;
+        }
+        // TODO: Add event to check line number.
+        // TODO: Check if clicking on tab button.
+        if (event.type == SDL_KEYDOWN) {
+            // All keybinds
+            if (event.key.keysym.sym == SDLK_LSHIFT) {
+                commandMode = !commandMode;
+            }
+            if (commandMode) {
+                switch (event.key.keysym.sym) {
+                    case SDLK_m:
+                        toggleFocusMode();
+                        std::cout << "Focus Toggled!" << std::endl;
+                        commandMode = false;
+                        break;
+                    case SDLK_e:
+                        std::cout << "Compiled!" << std::endl;
+                        commandMode = false;
+                        break;
+                }
+            }
+            else {
+                switch (event.key.keysym.sym) {
+                    case SDLK_F5:
+                        std::cout << "Compiled!" << std::endl;
+                        break;
+                }
+            }
+        }
+    }
 
-        public:
-
-            void attachObject(); // Adds an object type to the list of updated objects on screen at a given moment.
-            void detachObject(); // Removes an object type from the list of updated objects on screen at a given moment.
-
-            typedef struct Objects {
-                std::vector<GLfloat> vertices;
-                std::vector<int> indices;
-                
-                std::vector<GLfloat> colors;
-                std::vector<int> shaderProgramID;
-                std::vector<std::string> name;
-            } Objects;
-
-            class Queue {
-            
-                void listObjects(); // List all objects in the queue (BY NAME, INDEX IS THE ID FOR ALL VALUES/PARAMETERS)
-                void findObject(); // Returns true or false if the object is found.
-            
-            };
-
-    };
+    void convertHexToGL(int color, float &r, float &g, float &b) {
+        r = (color / 256 / 256) % 256;
+        g = (color / 256) % 256;
+        b = (color) % 256;
+        r /= 255.0f;
+        g /= 255.0f;
+        b /= 255.0f;
+    }
 
 }

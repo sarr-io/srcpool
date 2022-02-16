@@ -11,6 +11,7 @@ int close(SDL_Window* window, SDL_GLContext glContext) {
     return 0;
 }
 
+// Simple debugger callback, will most likely modify in the future.
 static void APIENTRY openglCallbackFunction(
     GLenum source,
     GLenum type,
@@ -29,6 +30,23 @@ static void APIENTRY openglCallbackFunction(
     }
 }
 
+std::vector<GLfloat> vertices {
+    // positions         // colors
+    -1.0f, 1.0f, 0.0f,  0.071f, 0.071f, 0.071f,  // top left
+    1.0f,  1.0f, 0.0f,  0.071f, 0.071f, 0.071f,   // top right
+    -1.0f, 0.95f, 0.0f,  0.071f, 0.071f, 0.071f,  // bottom left
+    1.0f, 0.95f, 0.0f,  0.071f, 0.071f, 0.071f  // bottom right
+};
+
+std::vector<GLuint> indices {
+    0, 1, 2,
+    2, 1, 3
+};
+
+std::vector<int> vertexAttribSizes {
+    3
+};
+
 int main(int argc, char* argv[]) {
 
     // Variables
@@ -40,12 +58,11 @@ int main(int argc, char* argv[]) {
     setGLAttributes();
 
     // Creating the window
-    Uint32 flags = SDL_WINDOW_BORDERLESS | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL;
     SDL_Window* window = SDL_CreateWindow("srcpool", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winW, winH, flags);
     SDL_GLContext glContext = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, glContext);
 
-    SDL_Surface* icon = IMG_Load("images\\icon.png");
+    SDL_Surface* icon = IMG_Load("images/icon.png");
     setIcon(window, icon);
 
     // Setting up OpenGL
@@ -53,67 +70,53 @@ int main(int argc, char* argv[]) {
         printf("Failed to initialize GLAD\n");
         return -1;
     }
+
     glViewport(0, 0, winW, winH);
+
     // Enable the debug callback
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(openglCallbackFunction, nullptr);
-    glDebugMessageControl(
-    GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, true
+    glDebugMessageControl
+    (
+        GL_DONT_CARE, 
+        GL_DONT_CARE, 
+        GL_DONT_CARE, 
+        0, NULL, true
     );
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    Renderer::Queue DefaultUI;
+    Renderer::Shader defaultShader;
+    Renderer::Object topBar;
+
+    defaultShader.Update("..\\editor\\shaders\\default\\default.vertex", "..\\editor\\shaders\\default\\default.fragment");
+    topBar.Update(vertices, indices, defaultShader.id, "triangle", vertexAttribSizes);
+    topBar.Attach(DefaultUI);
 
     while(!quit) {
         SDL_Event event;
         mouseX = event.motion.x;
         mouseY = event.motion.y;
         
-        // Input Collection
         while (SDL_PollEvent(&event) != 0) {
-            if (event.type == SDL_QUIT) {
-                std::cout << "Closing..." << std::endl;
-                quit = true;
-            }
-            // TODO: Add event to check line number.
-            // TODO: Check if clicking on tab button.
-            if (event.type == SDL_KEYDOWN) {
-                // All keybinds
-                if (event.key.keysym.sym == SDLK_LSHIFT) {
-                    commandMode = !commandMode;
-                }
-                if (commandMode) {
-                    switch (event.key.keysym.sym) {
-                        case SDLK_m:
-                            toggleFocusMode();
-                            std::cout << "Focus Toggled!" << std::endl;
-                            commandMode = false;
-                            break;
-                        case SDLK_e:
-                            std::cout << "Compiled!" << std::endl;
-                            commandMode = false;
-                            break;
-                    }
-                }
-                else {
-                    switch (event.key.keysym.sym) {
-                        case SDLK_F5:
-                            std::cout << "Compiled!" << std::endl;
-                            break;
-                    }
-                }
-            }
+            inputCollection(event, quit);
         }
 
         SDL_SetWindowHitTest(window, hitCallback, 0);
-
-        glClearColor(0.085f, 0.085f, 0.085f, 0.f);
+        
+        glClearColor(0.078f, 0.078f, 0.078f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        DefaultUI.Render();
 
         SDL_GL_SwapWindow(window);
     }
 
     // Closes all processes
+    topBar.Detach(DefaultUI);
+    defaultShader.Delete();
     close(window, glContext);
 
     return 0;
