@@ -10,10 +10,8 @@
 #include <fstream>
 #include <cstring>
 #include <sstream>
-#define STB_TRUETYPE_IMPLEMENTATION
-#include <stb_truetype.h> // (https://github.com/nothings/stb/blob/master/stb_truetype.h)
-#define VERTEXT_IMPLEMENTATION
-#include "vertext.h" // (thanks to Kevin Chin) if this didn't exsist I would probably cry
+#include <stb_truetype.h>
+#include <vertext.h> // (thanks to Kevin Chin) if this didn't exsist I would probably cry
 
 // Renderer
 namespace Renderer {
