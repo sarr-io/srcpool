@@ -26,7 +26,7 @@ Customize everything about the editor from the theme, to what rendering api it u
 ## 🔨 Features
 - ##### Created in SDL2 and OpenGL
 
-- ##### Completely customizable source without recompile
+- ##### Completely customizable source without manual recompile
 
       (Edit the Theme, Compilers, UI, Extensions, Etc)
 - ##### Built-in plugins 
