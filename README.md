@@ -1,5 +1,6 @@
 # PROJECT INDEFINITELY DISCONTINUED 
-(no more interest, and I dont want to reinvent the wheel worse than other people can)
+(no more interest in this specific version, and I dont want to reinvent the wheel worse than other people can)
+(this may change in the future, and I might approach it differently with the same name)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/49985341/137650226-f2a70bb1-19cb-4cad-8774-ddaaf83cb1b6.png"/>
